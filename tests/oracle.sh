@@ -20,6 +20,7 @@ find .
 
 # make oracle worker
 pushd worker/cppworker/worker
+sudo apt install libboost-regex-dev -y
 make -f ../build/makefile19
 
 #origSh# suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
