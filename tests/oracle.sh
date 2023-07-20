@@ -5,10 +5,22 @@ then
   mkdir -p testrun/src/github.com/paypal
   ln -s $PWD testrun/src/github.com/paypal/hera
 fi
-$GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
-ls -l $GOPATH/bin/mysqlworker
-ping -c1 -w1 odb3
-# TODO make oracle worker
+# $GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
+# ls -l $GOPATH/bin/mysqlworker
+
+# check oracle
+docker ps
+ss -tln
+
+# how do we install oracle libraries
+dpkg -l | head
+dnf -qa | head
+id
+find .
+
+# make oracle worker
+pushd worker/cppworker/worker
+make -f ../build/makefile19
 
 #origSh# suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
 #origSh# finalResult=0
