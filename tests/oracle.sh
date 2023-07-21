@@ -8,53 +8,37 @@ fi
 # $GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
 # ls -l $GOPATH/bin/mysqlworker
 
-# check oracle
-docker ps
-ss -tln
+#chkOracle# docker ps
+#chkOracle# ss -tln
 
 # make oracle worker
 pushd worker/cppworker/worker
 sudo apt install libboost-regex-dev -y
-wget https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
-cat << EOF > SHA384
-bb68094a12e754fc633874e8c2b4c4d38a45a65a5a536195d628d968fca72d7a5006a62a7b1fdd92a29134a06605d2b4  instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip
-5999f2333a9b73426c7af589ab13480f015c2cbd82bb395c7347ade37cc7040a833a398e9ce947ae2781365bd3a2e371  instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
-EOF
+wget -nv https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip 
+curl -O https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
+echo bb68094a12e754fc633874e8c2b4c4d38a45a65a5a536195d628d968fca72d7a5006a62a7b1fdd92a29134a06605d2b4  instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip >> SHA384
+echo 5999f2333a9b73426c7af589ab13480f015c2cbd82bb395c7347ade37cc7040a833a398e9ce947ae2781365bd3a2e371  instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip >> SHA384
 sha384sum -c SHA384
 pubdir=$PWD
 pushd /opt
 ln -s instantclient_19_19 instantclient_19_17
-for d in $pubdir/*.zip
-do
-    unzip $d
-done
+unzip $pubdir/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip
+unzip $pubdir/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
 popd
-ls -l /opt/instantclient_19_17//sdk/include/oci.h
-ls -l /opt/instantclient_19_19//sdk/include/oci.h
-NUMCPU=`grep -c processor /proc/cpuinfo`
-echo $NUMCPU to parallelize make
-make -f ../build/makefile19 -j $NUMCPU
+make -f ../build/makefile19 -j 3
+cp oracleworker $GOPATH/bin
+popd
 
-#origSh# suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
-#origSh# finalResult=0
-#origSh# for suite in $suites
-#origSh# do 
-#origSh#   for d in `ls -F $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$suite | grep /$ | sed -e 's,/,,' | egrep -v '(testutil|no_shard_no_error|set_shard_id_wl|reset_shard_id_wl)'`
-#origSh#   do 
-#origSh#       pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$suite/$d
-#origSh#       cp $GOPATH/bin/mysqlworker .
-#origSh#       $GOROOT/bin/go test -c .
-#origSh#       ./$d.test -test.v
-#origSh#       rv=$?
-#origSh#       if [ 0 != $rv ]
-#origSh#       then
-#origSh#          echo failing $suite $d
-#origSh#          grep ^ *.log
-#origSh#          finalResult=$rv
-#origSh# #        exit $rv
-#origSh#       fi
-#origSh#       popd
-#origSh#       sleep 10
-#origSh#   done
-#origSh# done
-#origSh# exit $finalResult
+# run test with oracle
+d=oracleHighLoadAdj
+pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
+cp $GOPATH/bin/oracleworker .
+$GOROOT/bin/go test -c .
+./$d.test -test.v | tee /dev/null
+rv=$?
+if [ 0 != $rv ]
+then
+    echo failing $suite $d
+    grep ^ *.log
+fi
+exit $rv
