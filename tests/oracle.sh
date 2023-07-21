@@ -24,11 +24,16 @@ sha384sum -c SHA384
 pubdir=$PWD
 pushd /opt
 ln -s instantclient_19_19 instantclient_19_17
-unzip $pubdir/*.zip
+for d in $pubdir/*.zip
+do
+    unzip $d
+done
 popd
 ls -l /opt/instantclient_19_17//sdk/include/oci.h
 ls -l /opt/instantclient_19_19//sdk/include/oci.h
-make -f ../build/makefile19
+NUMCPU=`grep -c processor /proc/cpuinfo`
+echo $NUMCPU to parallelize make
+make -f ../build/makefile19 -j $NUMCPU
 
 #origSh# suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
 #origSh# finalResult=0
