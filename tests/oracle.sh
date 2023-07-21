@@ -26,13 +26,14 @@ unzip $pubdir/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip
 unzip $pubdir/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
 popd
 make -f ../build/makefile19 -j 3
-cp oracleworker $GOPATH/bin
+mkdir -p $GOPATH/bin
+cp -v oracleworker $GOPATH/bin/
 popd
 
 # run test with oracle
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
-cp $GOPATH/bin/oracleworker .
+cp -v $GOPATH/bin/oracleworker .
 $GOROOT/bin/go test -c .
 ./$d.test -test.v | tee /dev/null
 rv=$?
