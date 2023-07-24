@@ -29,7 +29,7 @@ ln -s instantclient_19_19 instantclient_19_20
 ln -s instantclient_19_19 instantclient_19_17
 unzip $pubdir/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip
 unzip $pubdir/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
-unzip $pubdir/instantclient-sqlplus.x64-19.20.0.0.0dbru.zip
+unzip $pubdir/instantclient-sqlplus-linux.x64-19.20.0.0.0dbru.zip
 popd
 cat /proc/loadavg
 make -f ../build/makefile19 -j 3
