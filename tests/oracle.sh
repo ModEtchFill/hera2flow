@@ -54,5 +54,8 @@ then
     echo failing $suite $d
     grep ^ *.log
 fi
+head *.log
+ls -l
+tail *.log
 echo test done $rv
 exit $rv
