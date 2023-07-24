@@ -34,6 +34,7 @@ popd
 export ORACLE_HOME=/opt/instantclient_19_17
 mkdir -p $ORACLE_HOME/network/admin
 echo 'TEST3=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(Host=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XEPDB1)(FAILOVER_MODE=(TYPE=SESSION)(METHOD=BASIC)(RETRIES=1000)(DELAY=5))))' > $ORACLE_HOME/network/admin/tnsnames.ora
+find $ORACLE_HOME/network -ls
 export TWO_TASK=TEST3
 
 # run test with oracle
