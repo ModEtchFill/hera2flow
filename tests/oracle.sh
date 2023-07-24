@@ -13,8 +13,6 @@ fi
 #chkOracle# docker ps
 #chkOracle# ss -tln
 
-# make oracle worker
-pushd worker/cppworker/worker
 sudo apt install libboost-regex-dev -y
 wget -nv https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip https://download.oracle.com/otn_software/linux/instantclient/1920000/instantclient-sqlplus-linux.x64-19.20.0.0.0dbru.zip
 curl -O https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
@@ -24,21 +22,18 @@ echo 5999f2333a9b73426c7af589ab13480f015c2cbd82bb395c7347ade37cc7040a833a398e9ce
 ## ???? sqlplus for verification
 sha384sum -c SHA384
 pubdir=$PWD
+
 pushd /opt
-ln -s instantclient_19_19 instantclient_19_20
-ln -s instantclient_19_19 instantclient_19_17
+mkdir instantclient_19
+ln -s instantclient_19 instantclient_19_17
+ln -s instantclient_19 instantclient_19_19
+ln -s instantclient_19 instantclient_19_20
 unzip $pubdir/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip
 unzip $pubdir/instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip
 unzip $pubdir/instantclient-sqlplus-linux.x64-19.20.0.0.0dbru.zip
 popd
-cat /proc/loadavg
-make -f ../build/makefile19 -j 3
-cat /proc/loadavg
-mkdir -p $GOPATH/bin
-cp -v oracleworker $GOPATH/bin/
-popd
 
-export ORACLE_HOME=/opt/instantclient_19_17
+export ORACLE_HOME=/opt/instantclient_19
 mkdir -p $ORACLE_HOME/network/admin
 echo 'TEST3=(DESCRIPTION=(ADDRESS_LIST=(ADDRESS=(PROTOCOL=TCP)(Host=localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=XEPDB1)(FAILOVER_MODE=(TYPE=SESSION)(METHOD=BASIC)(RETRIES=1000)(DELAY=5))))' > $ORACLE_HOME/network/admin/tnsnames.ora
 find $ORACLE_HOME/network -ls
@@ -53,8 +48,31 @@ then
 else
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME
 fi
-echo LD_LIBRARY_PATH $LD_LIBRARY_PATH
-$ORACLE_HOME/sqlplus $username/$password@$TWO_TASK
+$ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 
+sleep 3.1
+$ORACLE_HOME/sqlplus $username/$password@localhost:1521/XEPDB1
+sleep 3.1
+$ORACLE_HOME/sqlplus system/$password@localhost:1521/XEPDB1
+#i=0
+#while [ $i -lt 111 ]
+#do
+#    $ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 2>&1 | tee sqlplus.log | sed -e "s/^/$i /"
+#    if [ ! grep -q ORA sqlplus.log ]
+#    then
+#        break
+#    fi
+#    sleep 1.1
+#    i=$(($i+1))
+#done
+
+
+# make oracle worker
+pushd worker/cppworker/worker
+make -f ../build/makefile19 -j 3
+mkdir -p $GOPATH/bin
+cp -v oracleworker $GOPATH/bin/
+popd
+
 
 # run test with oracle
 d=oracleHighLoadAdj
