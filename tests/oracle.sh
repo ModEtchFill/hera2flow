@@ -46,6 +46,8 @@ export password=1.2.8MomOfferExpand
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
+./oracleworker
+echo $? tried oracleworker
 $GOROOT/bin/go test -c .
 ./$d.test -test.v | tee /dev/null
 rv=$?
