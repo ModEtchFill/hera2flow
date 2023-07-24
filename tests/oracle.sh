@@ -1,3 +1,4 @@
+umask 022
 if [ x$GOPATH = x ]
 then
   # when running in github actions workflow
@@ -53,4 +54,5 @@ then
     echo failing $suite $d
     grep ^ *.log
 fi
+echo test done $rv
 exit $rv
