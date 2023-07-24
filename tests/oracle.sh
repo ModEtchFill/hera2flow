@@ -55,7 +55,8 @@ then
     grep ^ *.log
 fi
 ls -l
+grep ORA hera.log | head
 tail *.log
-grep WORKER.3 hera.log | head
+grep WORKER hera.log | head
 echo test done $rv
 exit $rv
