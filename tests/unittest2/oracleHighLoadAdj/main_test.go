@@ -141,10 +141,12 @@ func cfg() (map[string]string, map[string]string, testutil.WorkerType) {
 }
 
 func before() error {
+	fmt.Printf("before function")
 	return nil
 }
 
 func TestMain(m *testing.M) {
+	fmt.Printf("TestMain function")
 	os.Exit(testutil.UtilMain(m, cfg, before))
 }
 
@@ -158,6 +160,7 @@ func mkConn(t *testing.T, db *sql.DB) (*sql.Conn, context.CancelFunc) {
 }
 
 func TestBadPassword(t *testing.T) {
+	fmt.Printf("badPass disabled function")
 	return
 	logger.GetLogger().Log(logger.Debug, "TestBadPassword +++++++++++++")
 
@@ -201,6 +204,7 @@ func TestBadPassword(t *testing.T) {
 }
 
 func TestLimitConcurrentInit(t *testing.T) {
+	fmt.Printf("T Lim Concur Init function")
 	logger.GetLogger().Log(logger.Debug, "TestLimitConcurrentInit +++++++++++++")
 	if max_conn < 15 {
 		t.Error("max_conn likely too low to see TestLimitConcurrentInit")
@@ -211,6 +215,7 @@ func TestLimitConcurrentInit(t *testing.T) {
 }
 
 func TestSkipOciBreak(t *testing.T) {
+	fmt.Printf("Skip OCI break function")
 	logger.GetLogger().Log(logger.Debug, "TestSkipOciBreak +++++++++++++")
 	hostname, _ := os.Hostname()
 	fmt.Println("Hostname: ", hostname)

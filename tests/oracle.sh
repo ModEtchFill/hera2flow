@@ -1,5 +1,4 @@
 set -e # exit on cmd return 
-umask 022
 if [ x$GOPATH = x ]
 then
   # when running in github actions workflow
@@ -7,11 +6,6 @@ then
   mkdir -p testrun/src/github.com/paypal
   ln -s $PWD testrun/src/github.com/paypal/hera
 fi
-# $GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
-# ls -l $GOPATH/bin/mysqlworker
-
-#chkOracle# docker ps
-#chkOracle# ss -tln
 
 sudo apt install libboost-regex-dev -y
 wget -nv https://download.oracle.com/otn_software/linux/instantclient/1919000/instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip https://download.oracle.com/otn_software/linux/instantclient/1920000/instantclient-sqlplus-linux.x64-19.20.0.0.0dbru.zip
@@ -19,7 +13,6 @@ curl -O https://download.oracle.com/otn_software/linux/instantclient/1919000/ins
 echo 409b867f76c701ccba47f9278363b204137fc92444c317b36b60da35669453a99bd02a3c84b1b9b92c54fd94929a0eff  instantclient-sqlplus-linux.x64-19.20.0.0.0dbru.zip >> SHA384
 echo bb68094a12e754fc633874e8c2b4c4d38a45a65a5a536195d628d968fca72d7a5006a62a7b1fdd92a29134a06605d2b4  instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip >> SHA384
 echo 5999f2333a9b73426c7af589ab13480f015c2cbd82bb395c7347ade37cc7040a833a398e9ce947ae2781365bd3a2e371  instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip >> SHA384
-## ???? sqlplus for verification
 sha384sum -c SHA384
 pubdir=$PWD
 
@@ -49,22 +42,6 @@ else
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME
 fi
 echo select sysdate from dual\;|$ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 
-sleep 3.1
-echo select sysdate from dual\;|$ORACLE_HOME/sqlplus $username/$password@TEST3
-sleep 3.1
-echo select sysdate from dual\;|$ORACLE_HOME/sqlplus system/$password@localhost:1521/XEPDB1
-#i=0
-#while [ $i -lt 111 ]
-#do
-#    $ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 2>&1 | tee sqlplus.log | sed -e "s/^/$i /"
-#    if [ ! grep -q ORA sqlplus.log ]
-#    then
-#        break
-#    fi
-#    sleep 1.1
-#    i=$(($i+1))
-#done
-
 
 # make oracle worker
 pushd worker/cppworker/worker
@@ -90,6 +67,7 @@ sleep 1.5
 echo $RANDOM >> cal.log
 echo $RANDOM >> hera.log
 sleep 1.7
+chmod a+w cal.log
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
