@@ -50,7 +50,7 @@ else
 fi
 $ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 
 sleep 3.1
-$ORACLE_HOME/sqlplus $username/$password@localhost:1521/XEPDB1
+$ORACLE_HOME/sqlplus $username/$password@TEST3
 sleep 3.1
 $ORACLE_HOME/sqlplus system/$password@localhost:1521/XEPDB1
 #i=0
