@@ -74,7 +74,7 @@ cp -v $GOPATH/bin/oracleworker .
 #( ./oracleworker ; echo $? tried oracleworker with failure expected )
 $GOROOT/bin/go test -c .
 ls -l
-strace ./$d.test -test.v | tee /dev/null
+strace -ttfs111 -e trace=open,write,read ./$d.test -test.v | tee /dev/null
 rv=$?
 if [ 0 != $rv ]
 then
