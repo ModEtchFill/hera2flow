@@ -82,6 +82,12 @@ do
 done
 ( rm -f zstop ; while [ ! -f zstop ] ; do tail cal.log ;  sleep 1.1 ; done ) &
 sleep 1.2
+date >> cal.log
+date >> hera.log
+sleep 1.5
+echo $RANDOM >> cal.log
+echo $RANDOM >> hera.log
+sleep 1.7
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
