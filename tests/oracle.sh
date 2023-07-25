@@ -67,13 +67,13 @@ sleep 1.5
 echo $RANDOM >> cal.log
 echo $RANDOM >> hera.log
 sleep 1.7
-chmod a+w cal.log
+chmod a+w cal.log state.log hera.log
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
 #( ./oracleworker ; echo $? tried oracleworker with failure expected )
 $GOROOT/bin/go test -c .
-ls -l $d.test
+ls -l
 strace ./$d.test -test.v | tee /dev/null
 rv=$?
 if [ 0 != $rv ]
