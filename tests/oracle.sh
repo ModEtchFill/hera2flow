@@ -75,11 +75,13 @@ popd
 
 
 # run test with oracle
-for d in state.log hera.log
-do 
-    touch $d
-    tail -f $d | sed -e "s/^/$d /" &
-done
+touch state.log hera.log
+tail -f state.log hera.log &
+#for d in state.log hera.log
+#do 
+#    touch $d
+#    tail -f $d | sed -e "s/^/$d /" &
+#done
 ( rm -f zstop ; while [ ! -f zstop ] ; do tail cal.log ;  sleep 1.1 ; done ) &
 sleep 1.2
 date >> cal.log
@@ -94,7 +96,7 @@ cp -v $GOPATH/bin/oracleworker .
 #( ./oracleworker ; echo $? tried oracleworker with failure expected )
 $GOROOT/bin/go test -c .
 ls -l $d.test
-./$d.test -test.v | tee /dev/null
+strace ./$d.test -test.v | tee /dev/null
 rv=$?
 if [ 0 != $rv ]
 then
