@@ -48,11 +48,11 @@ then
 else
     export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$ORACLE_HOME
 fi
-$ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 
+echo select sysdate from dual\;|$ORACLE_HOME/sqlplus $username/$password@$TWO_TASK 
 sleep 3.1
-$ORACLE_HOME/sqlplus $username/$password@TEST3
+echo select sysdate from dual\;|$ORACLE_HOME/sqlplus $username/$password@TEST3
 sleep 3.1
-$ORACLE_HOME/sqlplus system/$password@localhost:1521/XEPDB1
+echo select sysdate from dual\;|$ORACLE_HOME/sqlplus system/$password@localhost:1521/XEPDB1
 #i=0
 #while [ $i -lt 111 ]
 #do
@@ -87,6 +87,7 @@ pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
 #( ./oracleworker ; echo $? tried oracleworker with failure expected )
 $GOROOT/bin/go test -c .
+ls -l $d.test
 ./$d.test -test.v | tee /dev/null
 rv=$?
 if [ 0 != $rv ]
