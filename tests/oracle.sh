@@ -75,17 +75,18 @@ popd
 
 
 # run test with oracle
-d=oracleHighLoadAdj
-pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
-cp -v $GOPATH/bin/oracleworker .
-#( ./oracleworker ; echo $? tried oracleworker with failure expected )
-$GOROOT/bin/go test -c .
 for d in state.log hera.log
 do 
     touch $d
     tail -f $d | sed -e "s/^/$d /" &
 done
 ( rm -f zstop ; while [ ! -f zstop ] ; do tail cal.log ;  sleep 1.1 ; done ) &
+sleep 1.2
+d=oracleHighLoadAdj
+pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
+cp -v $GOPATH/bin/oracleworker .
+#( ./oracleworker ; echo $? tried oracleworker with failure expected )
+$GOROOT/bin/go test -c .
 ./$d.test -test.v | tee /dev/null
 rv=$?
 if [ 0 != $rv ]
