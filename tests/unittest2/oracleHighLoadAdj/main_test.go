@@ -216,9 +216,8 @@ func TestLimitConcurrentInit(t *testing.T) {
 
 func TestSkipOciBreak(t *testing.T) {
 	logMsg := ""
-	fmt.Printf("disable Skip OCI break function")
+	fmt.Printf("Skip OCI break function")
 	logger.GetLogger().Log(logger.Debug, "TestSkipOciBreak +++++++++++++")
-	return
 	hostname, _ := os.Hostname()
 	fmt.Println("Hostname: ", hostname)
 	db, err := sql.Open("hera", hostname+":24317")
@@ -252,6 +251,8 @@ func TestSkipOciBreak(t *testing.T) {
 	// helper starts sql and rudely stops
 	// first with insert which stays in wait state for the client
 	// we want to keep current behavior
+
+	/*
 	logMsg = "doing rude.go"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
 	out, err := exec.Command(os.Getenv("GOROOT")+"/bin/go", "run", "cmd/rude.go", "insert").Output()
 	if err != nil {
@@ -281,6 +282,7 @@ func TestSkipOciBreak(t *testing.T) {
 	if testutil.RegexCountFile("is high load, skipping", "hera.log") < 1 {
 		t.Fatal("Error did not skip oci break")
 	}
+	// */
 
 	// start restore
 	// release stuckConn
