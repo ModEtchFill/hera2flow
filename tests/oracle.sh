@@ -75,7 +75,7 @@ cp -v $GOPATH/bin/oracleworker .
 $GOROOT/bin/go test -c .
 ls -l
 #timeout -v 222 strace -ttfs111 -e trace=open,write,read ./$d.test -test.v | tee /dev/null
-timeout -v 222 ./$d.test -test.v
+timeout -v --kill-after=444 222 ./$d.test -test.v
 rv=$?
 if [ 0 != $rv ]
 then
