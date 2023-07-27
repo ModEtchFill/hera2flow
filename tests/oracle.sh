@@ -1,4 +1,3 @@
-set -e # exit on cmd return 
 if [ x$GOPATH = x ]
 then
   # when running in github actions workflow
@@ -14,6 +13,12 @@ echo 409b867f76c701ccba47f9278363b204137fc92444c317b36b60da35669453a99bd02a3c84b
 echo bb68094a12e754fc633874e8c2b4c4d38a45a65a5a536195d628d968fca72d7a5006a62a7b1fdd92a29134a06605d2b4  instantclient-basiclite-linux.x64-19.19.0.0.0dbru.zip >> SHA384
 echo 5999f2333a9b73426c7af589ab13480f015c2cbd82bb395c7347ade37cc7040a833a398e9ce947ae2781365bd3a2e371  instantclient-sdk-linux.x64-19.19.0.0.0dbru.zip >> SHA384
 sha384sum -c SHA384
+rv=$?
+if [ 0 != $rv ]
+then
+    echo failing sha384
+    exit $rv
+fi
 pubdir=$PWD
 
 pushd /opt
