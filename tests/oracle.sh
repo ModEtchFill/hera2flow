@@ -87,22 +87,6 @@ popd
 
 
 # run test with oracle
-touch state.log hera.log
-tail -f state.log hera.log &
-#for d in state.log hera.log
-#do 
-#    touch $d
-#    tail -f $d | sed -e "s/^/$d /" &
-#done
-( rm -f zstop ; while [ ! -f zstop ] ; do tail cal.log ;  sleep 1.1 ; done ) &
-sleep 1.2
-date >> cal.log
-date >> hera.log
-sleep 1.5
-echo $RANDOM >> cal.log
-echo $RANDOM >> hera.log
-sleep 1.7
-chmod a+w cal.log state.log hera.log
 d=oracleHighLoadAdj
 pushd $GOPATH/src/github.com/paypal/hera/tests/unittest2/$d
 cp -v $GOPATH/bin/oracleworker .
@@ -117,10 +101,6 @@ then
     echo failing $suite $d
     grep ^ *.log
 fi
-touch zstop 
-ls -l
-grep ORA hera.log | head
-tail *.log
-grep WORKER hera.log | head
 echo test done $rv
+grep -E '(FAIL|PASS)' -A1 *.log
 exit $rv
