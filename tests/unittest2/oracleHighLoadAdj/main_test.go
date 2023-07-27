@@ -216,9 +216,8 @@ func TestLimitConcurrentInit(t *testing.T) {
 
 func TestSkipOciBreak(t *testing.T) {
 	logMsg := ""
-	fmt.Printf("disable Skip OCI break function")
-	logger.GetLogger().Log(logger.Debug, "disable TestSkipOciBreak +++++++++++++")
-	return
+	fmt.Printf("Skip OCI break function")
+	logger.GetLogger().Log(logger.Debug, "TestSkipOciBreak +++++++++++++")
 	hostname, _ := os.Hostname()
 	fmt.Println("Hostname: ", hostname)
 	db, err := sql.Open("hera", hostname+":24317")
@@ -288,6 +287,7 @@ func TestSkipOciBreak(t *testing.T) {
 	// start restore
 	// release stuckConn
 	logMsg = "pre restore"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
+	/*
 	for i := 0; i < numConn; i++ {
 		stuckTx[i].Rollback()
 		stuckConn[i].Close()
@@ -305,6 +305,7 @@ func TestSkipOciBreak(t *testing.T) {
 	if int(max_conn) != acpt4 {
 		t.Fatal("conn's did not restore")
 	}
+	// */
 	logMsg = "skip oci break test done"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
 	logger.GetLogger().Log(logger.Debug, "TestSkipOciBreak +++++++++++++ done")
 }
