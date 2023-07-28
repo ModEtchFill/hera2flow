@@ -80,7 +80,10 @@ select current_timestamp from dual;
 select usleep(2111000) from dual;
 select current_timestamp from dual;
 create public synonym usleep for usleep;
-grant execute on usleep to app;
+--grant execute on usleep to app;
+
+create table resilience_at_load ( id number, note varchar2(333) );
+create public synonym resilience_at_load for resilience_at_load;
 EOF
 
 # make oracle worker
