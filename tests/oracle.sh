@@ -98,14 +98,10 @@ cp -v $GOPATH/bin/oracleworker .
 #( ./oracleworker ; echo $? tried oracleworker with failure expected )
 $GOROOT/bin/go test -c .
 ls -l
-#timeout -v 222 strace -ttfs111 -e trace=open,write,read ./$d.test -test.v | tee /dev/null
 date -u +%Y%m%dz%H%M%S.%N
-time date -u +%Y%m%dz%H%M%S.%N
-time curl -sD - https://github.com/ | grep Date:
-time python3 -c "import time;now=time.time();print(time.strftime('%Y%m%d-%H%M%S',time.gmtime())+str(now-int(now))[1:])"
-python3 -c "import time;now=time.time();print(time.strftime('%Y%m%d-%H%M%S',time.gmtime())+str(now-int(now))[1:])"
 ./$d.test -test.v
 rv=$?
+python3 -c "import time;now=time.time();print(time.strftime('%Y%m%dZ%H%M%S',time.gmtime())+str(now-int(now))[1:])"
 if [ 0 != $rv ]
 then
     echo failing $suite $d

@@ -326,7 +326,7 @@ func execSql(t *testing.T, conn *sql.Conn, sql string, skipCommit bool) *sql.Tx 
 		t.Fatalf("Error exec %s %s\n", sql, err.Error())
 	}
 	skipCommit = true // try avoid stall
-	logMsg = "exec sql try avoid stall, avoid commit"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
+	logMsg := "exec sql try avoid stall, avoid commit"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
 	if skipCommit {
 		return tx
 	}
