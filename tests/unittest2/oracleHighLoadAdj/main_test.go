@@ -243,6 +243,7 @@ func TestSkipOciBreak(t *testing.T) {
 	for i := 0; i < numConn; i++ {
 		c, _ := mkConn(t, db)
 		stuckConn[i] = c
+		stuckTx[i] = nil
 		// stuckTx[i] = execSql(t, c, fmt.Sprintf("insert into resilience_at_load(id,note)values(%d,'stuckConn')", 1000+i), true)
 	}
 	logMsg = "add load done"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
