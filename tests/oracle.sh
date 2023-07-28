@@ -99,7 +99,12 @@ cp -v $GOPATH/bin/oracleworker .
 $GOROOT/bin/go test -c .
 ls -l
 #timeout -v 222 strace -ttfs111 -e trace=open,write,read ./$d.test -test.v | tee /dev/null
-timeout -v --kill-after=444 222 ./$d.test -test.v
+date -u +%Y%m%dz%H%M%S.%N
+time date -u +%Y%m%dz%H%M%S.%N
+time curl -sD - https://github.com/ | grep Date:
+time python3 -c "import time;now=time.time();print(time.strftime('%Y%m%d-%H%M%S',time.gmtime())+str(now-int(now))[1:])"
+python3 -c "import time;now=time.time();print(time.strftime('%Y%m%d-%H%M%S',time.gmtime())+str(now-int(now))[1:])"
+./$d.test -test.v
 rv=$?
 if [ 0 != $rv ]
 then
@@ -107,5 +112,5 @@ then
     grep ^ *.log
 fi
 echo test done $rv
-grep -E '(FAIL|PASS)' -A1 *.log
+grep -E '(FAIL([^O]|$)|PASS)' -A1 *.log
 exit $rv
