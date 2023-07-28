@@ -252,7 +252,6 @@ func TestSkipOciBreak(t *testing.T) {
 	// first with insert which stays in wait state for the client
 	// we want to keep current behavior
 
-	/*
 	logMsg = "doing rude.go"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
 	out, err := exec.Command(os.Getenv("GOROOT")+"/bin/go", "run", "cmd/rude.go", "insert").Output()
 	if err != nil {
@@ -287,7 +286,6 @@ func TestSkipOciBreak(t *testing.T) {
 	// start restore
 	// release stuckConn
 	logMsg = "pre restore"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
-	/*
 	for i := 0; i < numConn; i++ {
 		stuckTx[i].Rollback()
 		stuckConn[i].Close()
