@@ -232,7 +232,7 @@ func TestSkipOciBreak(t *testing.T) {
 	conn, _ := mkConn(t, db)
 	defer conn.Close()
 	logMsg = "pre tbl rm"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
-	//execSql(t, conn, "delete from resilience_at_load", false)
+	execSql(t, conn, "delete from resilience_at_load", false)
 	// execSql() commits, mux releases conn
 
 	logMsg = "add load"; fmt.Printf(logMsg); logger.GetLogger().Log(logger.Debug, logMsg)
