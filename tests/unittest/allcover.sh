@@ -6,9 +6,7 @@ export GOPATH=/home/runner/go
 rm -rf $GOPATH/allcover
 mkdir $GOPATH/allcover
 
-mkdir $GOPATH/bin
-export GOBIN=$GOPATH/bin
-$GOROOT/bin/go build -cover github.com/paypal/hera/worker/mysqlworker
+$GOROOT/bin/go install -v -cover github.com/paypal/hera/worker/mysqlworker
 ls -l $GOPATH/bin
 
 overall=0
