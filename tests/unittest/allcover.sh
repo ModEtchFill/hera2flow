@@ -1,3 +1,4 @@
+export GOPATH=/home/runner/work/hera2flow/hera2flow/go
 rm -rf $GOPATH/allcover
 mkdir $GOPATH/allcover
 overall=0
