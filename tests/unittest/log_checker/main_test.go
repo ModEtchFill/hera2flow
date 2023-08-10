@@ -130,4 +130,5 @@ func clientSessionDurLogScan() (error){
 		fmt.Printf("cal.log read error")
 		return err
 	}
+	return nil
 }
