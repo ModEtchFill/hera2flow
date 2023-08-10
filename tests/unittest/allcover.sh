@@ -1,6 +1,14 @@
-export GOPATH=/home/runner/work/hera2flow/hera2flow/go
+export GOROOT=/home/runner/work/hera2flow/hera2flow/go
+mkdir -p /home/runner/go/src/github.com/paypal
+ln -s /home/runner/hera2flow/hera2flow /home/runner/go/src/github.com/paypal/hera
+export GOPATH=/home/runner/go
+
 rm -rf $GOPATH/allcover
 mkdir $GOPATH/allcover
+
+$GOROOT/bin/go build -cover github.com/paypal/hera/worker/mysqlworker
+ls -l $GOPATH/bin
+
 overall=0
 for d in `ls -F tests/unittest | grep /$ | sed -e "s,/,," | egrep -v '(mysql_recycle|log_checker_initdb|testutil|rac_maint|mysql_direct|failover)'`
 do 
@@ -10,7 +18,7 @@ do
     cp $GOPATH/bin/mysqlworker .
     rm -f *.log 
 
-    go run github.com/paypal/hera/tests/testutil/regen rewrite tests/unittest/$d
+    $GOROOT/go run github.com/paypal/hera/tests/testutil/regen rewrite tests/unittest/$d
     go build -cover github.com/paypal/hera/tests/unittest/$d
     mkdir integcov
     GOCOVERDIR=integcov ./$d
