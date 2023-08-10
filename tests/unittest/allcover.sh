@@ -1,10 +1,12 @@
-wget -nv https://go.dev/dl/go1.20.7.linux-amd64.tar.gz
-echo f0a87f1bcae91c4b69f8dc2bc6d7e6bfcd7524fceec130af525058c0c17b1b44  go1.20.7.linux-amd64.tar.gz | sha256sum -c
+tarball=go1.20.7.linux-amd64.tar.gz
+wget -nv https://go.dev/dl/$tarball
+echo f0a87f1bcae91c4b69f8dc2bc6d7e6bfcd7524fceec130af525058c0c17b1b44  $tarball | sha256sum -c
 if [ x$? != x0 ]
 then
     echo bad sha256sum
     exit 1
 fi
+tar zxf $tarball
 
 export GOROOT=$PWD/go
 export GOPATH=/home/runner/go
