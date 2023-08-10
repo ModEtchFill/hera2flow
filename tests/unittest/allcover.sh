@@ -1,13 +1,14 @@
 export GOROOT=/home/runner/work/hera2flow/hera2flow/go
 mkdir -p /home/runner/go/src/github.com/paypal
-ln -s /home/runner/hera2flow/hera2flow /home/runner/go/src/github.com/paypal/hera
+ln -s /home/runner/work/hera2flow/hera2flow /home/runner/go/src/github.com/paypal/hera
 export GOPATH=/home/runner/go
 
 rm -rf $GOPATH/allcover
 mkdir $GOPATH/allcover
 
-$GOROOT/bin/go install -v -cover github.com/paypal/hera/worker/mysqlworker
+$GOROOT/bin/go install -cover github.com/paypal/hera/worker/mysqlworker
 ls -l $GOPATH/bin
+pwd
 
 overall=0
 for d in `ls -F tests/unittest | grep /$ | sed -e "s,/,," | egrep -v '(mysql_recycle|log_checker_initdb|testutil|rac_maint|mysql_direct|failover)'`
