@@ -98,7 +98,7 @@ func TestCalClientSessionDur(t *testing.T) {
 
 	cancel()
 	conn.Close()
-	err := clientSessionDurLogScan(t)
+	err = clientSessionDurLogScan()
 	if err != nil {
 		t.Fatalf("clientSessionDurLogScan %v", err)
 	}
