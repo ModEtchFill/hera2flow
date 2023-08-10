@@ -18,7 +18,7 @@ do
     cp $GOPATH/bin/mysqlworker .
     rm -f *.log 
 
-    $GOROOT/bin/go run github.com/paypal/hera/tests/testutil/regen rewrite tests/unittest/$d
+    $GOROOT/bin/go run ../testutil/regen rewrite tests/unittest/$d
     $GOROOT/bin/go build -cover github.com/paypal/hera/tests/unittest/$d
     mkdir integcov
     GOCOVERDIR=integcov ./$d
