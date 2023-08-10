@@ -18,12 +18,12 @@ do
     cp $GOPATH/bin/mysqlworker .
     rm -f *.log 
 
-    $GOROOT/go run github.com/paypal/hera/tests/testutil/regen rewrite tests/unittest/$d
-    go build -cover github.com/paypal/hera/tests/unittest/$d
+    $GOROOT/bin/go run github.com/paypal/hera/tests/testutil/regen rewrite tests/unittest/$d
+    $GOROOT/bin/go build -cover github.com/paypal/hera/tests/unittest/$d
     mkdir integcov
     GOCOVERDIR=integcov ./$d
-    go tool covdata percent -i=integcov
-    go tool covdata merge -i=integcov,$GOPATH/allcover -o $GOPATH/allcover
+    $GOROOT/bin/go tool covdata percent -i=integcov
+    $GOROOT/bin/go tool covdata merge -i=integcov,$GOPATH/allcover -o $GOPATH/allcover
 
     #$GOROOT/bin/go test -c github.com/paypal/hera/tests/unittest/$d 
     #./$d.test -test.v
@@ -48,6 +48,6 @@ do
     rm -f *.log 
     popd
 done
-go tool covdata func -i=$GOPATH/allcover
-go tool covdata percent -i=$GOPATH/allcover
+$GOROOT/bin/go tool covdata func -i=$GOPATH/allcover
+$GOROOT/bin/go tool covdata percent -i=$GOPATH/allcover
 exit $overall
