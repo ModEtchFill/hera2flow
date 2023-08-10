@@ -98,15 +98,19 @@ func TestCalClientSessionDur(t *testing.T) {
 
 	cancel()
 	conn.Close()
-	clientSessionDurLogScan(t)
+	err := clientSessionDurLogScan(t)
+	if err != nil {
+		t.Fatalf("clientSessionDurLogScan %v", err)
+	}
 	logger.GetLogger().Log(logger.Debug, "TestCalClientSessionDur done  -------------------------------------------------------------")
 }
 
-func clientSessionDurLogScan(t *testing.T){
+func clientSessionDurLogScan() (error){
 	file, err := os.Open("cal.log")
 	defer file.Close()
 	if err != nil {
-		t.Fatalf("Error in opening cal.log")
+		fmt.Printf("Error in opening cal.log")
+		return err
 	}
 	re := regexp.MustCompile("[ |\t][0-9]+\\.[0-9]")
 	cliSession_re := regexp.MustCompile("CLIENT_SESSION.*corr_id_")
@@ -116,12 +120,14 @@ func clientSessionDurLogScan(t *testing.T){
 		if(cliSession_re.MatchString(line)){
 			_, err := strconv.ParseFloat(strings.TrimSpace(re.FindAllString(line, -1)[0]),32)
 			if(err != nil){
-				t.Fatalf("Num error for CLIENT_SESSION duration")
+				fmt.Printf("Num error for CLIENT_SESSION duration")
+				return err
 			}
 		}
 	}
 
 	if err := scanner.Err(); err != nil {
-		t.Fatalf("cal.log read error")
+		fmt.Printf("cal.log read error")
+		return err
 	}
 }

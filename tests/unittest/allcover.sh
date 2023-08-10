@@ -3,7 +3,7 @@ mkdir -p /home/runner/go/src/github.com/paypal
 ln -s /home/runner/work/hera2flow/hera2flow /home/runner/go/src/github.com/paypal/hera
 export GOPATH=/home/runner/go
 
-rm -rf $GOPATH/allcover
+rm -rf $GOPATH/allcover{,2}
 mkdir $GOPATH/allcover
 
 $GOROOT/bin/go install -cover github.com/paypal/hera/worker/mysqlworker
@@ -23,29 +23,14 @@ do
     $GOROOT/bin/go build -cover github.com/paypal/hera/tests/unittest/$d
     mkdir integcov
     GOCOVERDIR=integcov ./$d
+    rv=$?
+    echo rv rv $rv for test $d under integration coverage run
     $GOROOT/bin/go tool covdata percent -i=integcov
-    $GOROOT/bin/go tool covdata merge -i=integcov,$GOPATH/allcover -o $GOPATH/allcover
+    mkdir $GOPATH/allcover2
+    $GOROOT/bin/go tool covdata merge -i=integcov,$GOPATH/allcover -o $GOPATH/allcover2
+    rm -rf $GOPATH/allcover
+    mv $GOPATH/allcover{2,}
 
-    #$GOROOT/bin/go test -c github.com/paypal/hera/tests/unittest/$d 
-    #./$d.test -test.v
-    #rv=$?
-#    grep -E '(FAIL|PASS)' -A1 *.log
-#    if [ 0 != $rv ]
-#    then
-#        echo "Retrying" $d
-#        echo "exit code" $rv 
-#        ./$d.test -test.v
-#        rv=$?
-#        grep -E '(FAIL|PASS)' -A1 *.log
-#    fi
-#    if [ 0 != $rv ]
-#    then
-#        #grep ^ *.log
-#        popd
-#        #exit $rv
-#        overall=1
-#        continue
-#    fi
     rm -f *.log 
     popd
 done
