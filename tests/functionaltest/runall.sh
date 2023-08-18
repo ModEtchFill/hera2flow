@@ -32,22 +32,25 @@ do
     d=`basename $pathD`
     ln $GOPATH/bin/mysqlworker .
     $GOROOT/bin/go test -c .
-    ./$d.test -test.v
+    ./$d.test -test.v 2>&1 | tee std.log
     rv=$?
     if [ 0 != $rv ]
     then
        echo failing $pathD
-       egrep '(PASS|FAIL)' -A1 -B1 *.log
-       head *.log
-       wc *.log
-       tail *.log
        finalResult=$rv
     fi
+    egrep '(PASS|FAIL)' -A1 -B1 *.log
     rm *.log
-    popd
     df -m
-    time du -m | sort -n | tail
+    ls -l *.log
     pkill watchdog
-    pkill -ILL mux
+    pkill mux mysqlworker
+    date
+    sleep 1.1
+    date
+    ls -l *.log
+    popd
+
+    time du -m | sort -n | tail
 done
 exit $finalResult
