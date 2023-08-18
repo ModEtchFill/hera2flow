@@ -34,7 +34,7 @@ do
     $GOROOT/bin/go test -c .
     ./$d.test -test.v 2>&1 | tee std.log
     egrep '^--- (PASS|[^:]*):' std.log
-    if !grep '^--- PASS:' std.log
+    if ! grep -q '^--- PASS:' std.log
     then
         echo failing $pathD
         finalResult=1
