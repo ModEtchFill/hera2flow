@@ -67,6 +67,7 @@ func setupDb() error {
 
 func TestMain (m *testing.M) {
 	os.Exit(testutil.UtilMain(m, cfg, setupDb))
+        fmt.Println ("end TestMain");
 }
 
 /* ##########################################################################################
@@ -179,5 +180,6 @@ func TestSetShardID(t *testing.T) {
 
 	testutil.DoDefaultValidation(t)
 	logger.GetLogger().Log(logger.Debug, "TestSetShardID done  -------------------------------------------------------------")
+        fmt.Println ("end TestSetShardID done  ----");
 }
 

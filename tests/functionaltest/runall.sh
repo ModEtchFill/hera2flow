@@ -26,32 +26,22 @@ wc toRun shortRun
 #     no_shard_no_error|set_shard_id_wl|reset_shard_id_wl)' | sed -e "s,^,$suite/," >> toRun
 
 finalResult=0
-for pathD in `cat shortRun`
+for pathD in `cat shortRun toRun`
 do 
     pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$pathD
     d=`basename $pathD`
     ln $GOPATH/bin/mysqlworker .
     $GOROOT/bin/go test -c .
     ./$d.test -test.v 2>&1 | tee std.log
-    rv=$?
-    if [ 0 != $rv ]
+    egrep '^--- (PASS|[^:]*):' std.log
+    if !grep '^--- PASS:' std.log
     then
-       echo failing $pathD
-       finalResult=$rv
+        echo failing $pathD
+        finalResult=1
     fi
-    egrep '(PASS|FAIL)' -A1 -B1 *.log
-    df -m
     pkill watchdog
     pkill mux 
     pkill mysqlworker
-    ls -l *.log
-    date
-    sleep 1.1
-    date
-    ls -l *.log
-    rm *.log
     popd
-
-    time du -m | sort -n | tail
 done
 exit $finalResult

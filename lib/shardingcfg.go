@@ -100,7 +100,15 @@ func getSQL() string {
 /*
 	load the physical to logical maping
 */
+var zeroTime time.Time
+var lastLoad time.Time
 func loadMap(ctx context.Context, db *sql.DB) error {
+	if lastLoad.Equal(time.Time{}) {
+		lastLoad = time.Now()
+	}
+	if time.Since(lastLoad) < 2 * time.Second {
+		return nil
+	}
 	if logger.GetLogger().V(logger.Verbose) {
 		logger.GetLogger().Log(logger.Verbose, "Begin loading shard map")
 	}
