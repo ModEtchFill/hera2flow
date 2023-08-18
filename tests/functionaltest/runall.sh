@@ -40,15 +40,16 @@ do
        finalResult=$rv
     fi
     egrep '(PASS|FAIL)' -A1 -B1 *.log
-    rm *.log
     df -m
-    ls -l *.log
     pkill watchdog
-    pkill mux mysqlworker
+    pkill mux 
+    pkill mysqlworker
+    ls -l *.log
     date
     sleep 1.1
     date
     ls -l *.log
+    rm *.log
     popd
 
     time du -m | sort -n | tail
