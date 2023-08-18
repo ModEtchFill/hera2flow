@@ -37,7 +37,10 @@ do
     if [ 0 != $rv ]
     then
        echo failing $pathD
-       grep ^ *.log
+       egrep '(PASS|FAIL)' -A1 -B1 *.log
+       head *.log
+       wc *.log
+       tail *.log
        finalResult=$rv
     fi
     rm *.log
