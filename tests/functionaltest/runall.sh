@@ -26,16 +26,17 @@ wc toRun shortRun
 #     no_shard_no_error|set_shard_id_wl|reset_shard_id_wl)' | sed -e "s,^,$suite/," >> toRun
 
 finalResult=0
-for d in `cat shortRun`
+for pathD in `cat shortRun`
 do 
-    pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$d
+    pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$pathD
+    d=`basename $pathD`
     ln $GOPATH/bin/mysqlworker .
     $GOROOT/bin/go test -c .
     ./$d.test -test.v
     rv=$?
     if [ 0 != $rv ]
     then
-       echo failing $suite $d
+       echo failing $pathD
        grep ^ *.log
        finalResult=$rv
     fi
