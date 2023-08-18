@@ -199,8 +199,8 @@ func (m *mux) cleanupConfig() error {
 func MakeDB(dockerName string, dbName string, dbType DBType) (ip string) {
 	CleanDB(dockerName)
 	if dbType == MySQL {
-		//Commented out temporarily so we don't have to run docker all the time
-		cmd := exec.Command("docker", "run", "--name", dockerName, "-e", "MYSQL_ROOT_PASSWORD=1-testDb", "-e", "MYSQL_DATABASE="+dbName, "-d", "mysql:latest")
+		// mac must use -p port forward
+		cmd := exec.Command("docker", "run", "--name", dockerName,"-p3306:3306", "-e", "MYSQL_ROOT_PASSWORD=1-testDb", "-e", "MYSQL_DATABASE="+dbName, "-d", "mysql:latest")
 		cmd.Run()
 
 		// find its IP
@@ -238,6 +238,23 @@ func MakeDB(dockerName string, dbName string, dbType DBType) (ip string) {
 		} else {
 			os.Setenv("username", "appuser")
 		}
+
+			logger.GetLogger().Log(logger.Warning, "20230817kkang pre drop sh map")
+        DBDirect("DROP TABLE IF EXISTS hera_shard_map","127.0.0.1", dbName, MySQL)
+			logger.GetLogger().Log(logger.Warning, "20230817kkang pre create table sh map")
+        DBDirect("CREATE TABLE hera_shard_map (SCUTTLE_ID INT, SHARD_ID INT, STATUS CHAR(1), READ_STATUS CHAR(1), WRITE_STATUS CHAR(1), REMARKS VARCHAR(500))","127.0.0.1", dbName, MySQL);
+        max_scuttle := 128;
+        //err1  := testutil.PopulateShardMap(max_scuttle);
+        for x := 0; x < max_scuttle; x++ {
+			//logger.GetLogger().Log(logger.Warning, "20230817kkang pre sh map",x)
+            dml := fmt.Sprint ("INSERT INTO hera_shard_map VALUES (", x, ", ",  x % 5, ",'Y','Y','Y','Initial')")
+            DBDirect(dml, "127.0.0.1", dbName, MySQL)
+        }
+			logger.GetLogger().Log(logger.Warning, "20230817kkang end sh map")
+
+        	DBDirect("drop table if exists test_simple_table_1", "127.0.0.1", dbName, MySQL)
+	
+		DBDirect("CREATE TABLE test_simple_table_1 (ID INT PRIMARY KEY, NAME VARCHAR(128), STATUS INT, PYPL_TIME_TOUCHED INT)","127.0.0.1", dbName, MySQL)
 
 		return ipBuf.String()
 	} else if dbType == PostgreSQL {
@@ -393,11 +410,14 @@ func (m *mux) StartServer() error {
 			os.Setenv("TWO_TASK_4", "tcp(127.0.0.1:2121)/heratestdb")
 		} else if xMysql == "auto" {
 			ip := MakeDB("mysql22", "heratestdb", MySQL)
-			os.Setenv("TWO_TASK", "tcp("+ip+":3306)/heratestdb")
+			if os.Getenv("SHELL") == "/bin/zsh" {
+				ip = "127.0.0.1" // for mac
+			}
+			os.Setenv("TWO_TASK", "tcp("+ip+":3306)/heratestdb") //?timeout=9s&tls=skip-verify&clientFoundRows=true")
 			os.Setenv("TWO_TASK_1", "tcp("+ip+":3306)/heratestdb")
-			os.Setenv("TWO_TASK_2", "tcp("+ip+":3306)/heratestdb")
-			os.Setenv("TWO_TASK_3", "tcp("+ip+":3306)/heratestdb")
-			os.Setenv("TWO_TASK_4", "tcp("+ip+":3306)/heratestdb")
+			os.Setenv("TWO_TASK_2", "tcp("+ip+":3306)/heratestdb") 
+			os.Setenv("TWO_TASK_3", "tcp("+ip+":3306)/heratestdb") 
+			os.Setenv("TWO_TASK_4", "tcp("+ip+":3306)/heratestdb") 
 			os.Setenv("MYSQL_IP", ip)
 			// Set up the rac_maint table
 			pfx := os.Getenv("MGMT_TABLE_PREFIX")
@@ -468,7 +488,9 @@ func (m *mux) StartServer() error {
 			return err
 		}
 	}
-	logger.GetLogger().Log(logger.Info, "StartServer: Mux is up, time =", time.Now().Unix())
+	logger.GetLogger().Log(logger.Info, "StartServer: Mux is up, begin settle time 33s, time =", time.Now().Unix())
+	time.Sleep(33000*time.Millisecond)
+	logger.GetLogger().Log(logger.Info, "end settle time , time =", time.Now().Unix())
 	return nil
 }
 

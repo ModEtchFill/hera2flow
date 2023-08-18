@@ -15,7 +15,8 @@ import (
 	"strings"
 	"testing"
         "github.com/paypal/hera/client/gosqldriver"
-	_"github.com/paypal/hera/client/gosqldriver/tcp"
+	_ "github.com/paypal/hera/client/gosqldriver/tcp"
+	_ "github.com/paypal/hera/lib"
 	"github.com/paypal/hera/utility/logger"
 )
 
@@ -138,7 +139,10 @@ func RunMysql(sql string) (string, error) {
 
 
 func RunDML(dml string) error {
-	db, err := sql.Open("heraloop", fmt.Sprintf("%d:0:0", 0))
+        hostname := GetHostname()
+        fmt.Println ("Hostname: ", hostname);
+        db, err := sql.Open("hera", hostname + ":31002")
+	//db, err := sql.Open("hera" /*loop"*/, fmt.Sprintf("%d:0:0", 0))
 	if err != nil {
 		return err
 	}
@@ -214,7 +218,10 @@ func RunDML1(dml string) error {
 }
 
 func PopulateShardMap(max_scuttle int) error {
-        db, err := sql.Open("heraloop", fmt.Sprintf("%d:0:0", 0))
+        hostname := GetHostname()
+        fmt.Println ("Hostname: ", hostname);
+        db, err := sql.Open("hera", hostname + ":31002")
+	//db, err := sql.Open("hera"/*loop"*/, fmt.Sprintf("%d:0:0", 0))
         if err != nil {
                 return err
         }
@@ -260,7 +267,10 @@ func PopulateWhilelistShardMap() error {
 	query[6] = "INSERT INTO hera_whitelist ( enable, shard_key, shard_id, read_status, write_status ) VALUES ( 'Y', 444, 4, 'Y', 'Y' )"
 	query[7] = "INSERT INTO hera_whitelist ( enable, shard_key, shard_id, read_status, write_status ) VALUES ( 'Y', 555, 5, 'Y', 'Y' )"
 	query[8] = "INSERT INTO hera_whitelist ( enable, shard_key, shard_id, read_status, write_status ) VALUES ( 'Y', 1234, 4, 'Y', 'Y' )"
-        db, err := sql.Open("heraloop", fmt.Sprintf("%d:0:0", 0))
+        hostname := GetHostname()
+        fmt.Println ("Hostname: ", hostname);
+        db, err := sql.Open("hera", hostname + ":31002")
+	//db, err := sql.Open("hera"/*loop"*/, fmt.Sprintf("%d:0:0", 0))
         if err != nil {
                 return err
         }
@@ -606,8 +616,11 @@ func ModifyOpscfgParam (t *testing.T, logfile string, opscfg_param string, opscf
 }
 
 func GetHostname() string {
-        hostname,err := os.Hostname()
+	if true {
+		return "127.0.0.1"
+	}
 
+        hostname,err := os.Hostname()
         if err != nil {
                 hostname = "127.0.0.1" 
         }

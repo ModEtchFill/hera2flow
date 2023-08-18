@@ -80,8 +80,11 @@ func (adapter *mysqlAdapter) InitDB() (*sql.DB, error) {
 		attempt := 1
 		is_writable := false
 		for attempt <= 3 {
+			logger.GetLogger().Log(logger.Warning, user+":"+pass+"@"+curDs+" connect start 20230817kkang "+fmt.Sprintf(" %d", idx))
+			
 			db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@%s", user, pass, curDs))
 			if err == nil {
+				//db.SetMaxIdleConns(0) 
 				is_writable = adapter.Heartbeat(db)
 				if is_writable {
 					if logger.GetLogger().V(logger.Warning) {

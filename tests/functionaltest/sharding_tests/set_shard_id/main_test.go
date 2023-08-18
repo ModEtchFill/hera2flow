@@ -45,6 +45,7 @@ func cfg() (map[string]string, map[string]string, testutil.WorkerType) {
 
 
 func setupDb() error {
+	/*
 	testutil.RunDML("DROP TABLE IF EXISTS test_simple_table_1")
 	testutil.RunDML("DROP TABLE IF EXISTS hera_shard_map")
 	if os.Getenv("WORKER") == "postgres" {
@@ -59,7 +60,8 @@ func setupDb() error {
 	if err1 != nil { 
 	    return err1
 	}
-	return err1
+	return err1 // */
+	return nil
 }
 
 

@@ -6,6 +6,8 @@ then
   ln -s $PWD testrun/src/github.com/paypal/hera
 fi
 $GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
+$GOROOT/bin/go install github.com/paypal/hera/watchdog
+$GOROOT/bin/go install github.com/paypal/hera/mux
 suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
 finalResult=0
 for suite in $suites
