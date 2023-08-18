@@ -28,6 +28,8 @@ do
       fi
       popd
       sleep 10
+      pkill watchdog
+      pkill -ILL mux
   done
 done
 exit $finalResult
