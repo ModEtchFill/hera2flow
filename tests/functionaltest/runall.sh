@@ -8,6 +8,8 @@ fi
 $GOROOT/bin/go install github.com/paypal/hera/worker/mysqlworker
 $GOROOT/bin/go install github.com/paypal/hera/watchdog
 $GOROOT/bin/go install github.com/paypal/hera/mux
+ls -l $GOPATH/bin
+echo $1=one $2=two
 if [ x-$1 == x-all ]
 then
     suites="bind_eviction_tests strandedchild_tests coordinator_tests saturation_tests adaptive_queue_tests rac_tests sharding_tests"
