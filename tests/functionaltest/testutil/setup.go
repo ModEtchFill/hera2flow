@@ -103,6 +103,7 @@ func (m *mux) setupConfig() error {
 	} else if m.wType == PostgresWorker {
 		m.appcfg["child.executable"] = "postgresworker"
 	}
+	m.appcfg["random_start_ms"] = "33"
 	err := createCfg(m.appcfg, "hera")
 	if err != nil {
 		return err
@@ -488,9 +489,9 @@ func (m *mux) StartServer() error {
 			return err
 		}
 	}
-	logger.GetLogger().Log(logger.Info, "StartServer: Mux is up, begin settle time 33s, time =", time.Now().Unix())
-	time.Sleep(33000*time.Millisecond)
-	logger.GetLogger().Log(logger.Info, "end settle time , time =", time.Now().Unix())
+	logger.GetLogger().Log(logger.Info, "StartServer: Mux is up, time =", time.Now().Unix())
+	//time.Sleep(33000*time.Millisecond)
+	//logger.GetLogger().Log(logger.Info, "end settle time , time =", time.Now().Unix())
 	return nil
 }
 
