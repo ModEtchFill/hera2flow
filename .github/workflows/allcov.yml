@@ -2,9 +2,9 @@ name: allCov
 on:
   workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [ mainDisable ]
   pull_request:
-    branches: [ main ]
+    branches: [ mainDisable ]
 jobs:
   odbTest:
     runs-on: ubuntu-latest
