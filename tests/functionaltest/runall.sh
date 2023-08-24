@@ -31,6 +31,16 @@ do
     pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$pathD
     d=`basename $pathD`
     ln $GOPATH/bin/mysqlworker .
+
+    if [ -f ../setup-mysql.sql && ! -f ../setup-mysql.sql.out ]
+    then
+        cat ../setup-mysql.sql | mysql -uroot -p1-testDb heratestdb | tee ../setup-mysql.sql.out
+    fi
+    if [ -f setup-mysql.sql ]
+    then
+        cat setup-mysql.sql | mysql -uroot -p1-testDb heratestdb 
+    fi
+
     $GOROOT/bin/go test -c .
     ./$d.test -test.v 2>&1 | tee std.log
     egrep -n '^--- (PASS|[^:]*):' std.log
