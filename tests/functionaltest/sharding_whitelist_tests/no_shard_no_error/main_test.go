@@ -121,7 +121,7 @@ func TestNoShardNoError(t *testing.T) {
             t.Fatalf ("Error: Did NOT get shard_key_auto_discovery in CAL log");
         }
 	fmt.Println ("Verify Insert and Select event are sent to shard 3 ");
-        cal_count = testutil.RegexCountFile ("T.*API.*CLIENT_SESSION_3", "cal.log")
+        cal_count = testutil.RegexCountFile ("T.*API.*CLIENT_SESSION_2", "cal.log")
 	if (cal_count < 2) {
             t.Fatalf ("Error: Did NOT get API.*CLIENT_SESSION_3 in CAL log");
         }

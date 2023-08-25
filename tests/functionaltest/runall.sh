@@ -56,6 +56,10 @@ do
         pkill watchdog
         pkill mux 
         pkill mysqlworker
+        if [ -f setup-mysql.sql ]
+        then
+            cat setup-mysql.sql | mysql -h127.0.0.1 -uroot -p1-testDb heratestdb
+        fi
         mv std{,1}.log
         ./$d.test -test.v 2>&1 | tee std.log
         egrep -n '^--- (PASS|[^:]*):' std.log
