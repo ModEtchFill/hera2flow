@@ -100,15 +100,12 @@ func getSQL() string {
 /*
 	load the physical to logical maping
 */
-var zeroTime time.Time
 var lastLoad time.Time
 func loadMap(ctx context.Context, db *sql.DB) error {
-	if lastLoad.Equal(time.Time{}) {
-		lastLoad = time.Now()
-	}
 	if time.Since(lastLoad) < 2 * time.Second {
 		return nil
 	}
+	lastLoad = time.Now()
 	if logger.GetLogger().V(logger.Verbose) {
 		logger.GetLogger().Log(logger.Verbose, "Begin loading shard map")
 	}
@@ -224,7 +221,12 @@ func getWLSQL() string {
 /*
 	load the whitelist mapping
 */
+var lastLoadList time.Time
 func loadWhitelist(ctx context.Context, db *sql.DB) {
+	if time.Since(lastLoadList) < 2 * time.Second {
+		return 
+	}
+	lastLoadList = time.Now()
 	if logger.GetLogger().V(logger.Verbose) {
 		logger.GetLogger().Log(logger.Verbose, "Begin loading whitelist")
 	}

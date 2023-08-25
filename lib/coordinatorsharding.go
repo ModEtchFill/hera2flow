@@ -225,6 +225,7 @@ func (crd *Coordinator) computeLogicalShards() {
 			wlcfg = GetWLCfg()
 		}
 		if wlcfg != nil {
+			logger.GetLogger().Log(logger.Debug, "25kkang chk list", len(wlcfg.records), "with key=",key)
 			shardRec, ok := wlcfg.records[key]
 			if ok {
 				evt := cal.NewCalEvent(EvtTypeSharding, EvtNameWhitelist, cal.TransOK, "")
@@ -238,13 +239,16 @@ func (crd *Coordinator) computeLogicalShards() {
 				// check if WL entry is valid
 				// TODO: is this OK, should we fallback or error instead?
 				if (shardRec.logical >= 0) && (shardRec.logical < GetConfig().NumOfShards) {
+					logger.GetLogger().Log(logger.Debug, "25kkang use list entry")
 					crd.shard.shardRecs = append(crd.shard.shardRecs, shardRec)
 				} else {
 					// fallback to check the shard map
+					logger.GetLogger().Log(logger.Debug, "25kkang list entry invalid,fallback")
 					crd.shard.shardRecs = append(crd.shard.shardRecs, crd.getShardRec(key))
 				}
 			} else {
 				// not in the WL, fallback to check the shard map
+				logger.GetLogger().Log(logger.Debug, "25kkang not in list,fallback")
 				crd.shard.shardRecs = append(crd.shard.shardRecs, crd.getShardRec(key))
 			}
 		} else {

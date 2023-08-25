@@ -63,7 +63,7 @@ do
         then
             sleep 0.01
             tail -n111 *.log
-            echo failing $pathD on retry
+            echo failing $pathD on retry ====
             finalResult=1
         fi
     fi
