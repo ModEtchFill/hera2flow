@@ -63,7 +63,7 @@ do
         then
             echo failing $pathD on retry
             sleep 0.01
-            tail -n44 ^ *.log
+            tail -n44 *.log
             finalResult=1
         fi
     fi
