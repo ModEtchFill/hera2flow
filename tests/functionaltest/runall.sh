@@ -55,11 +55,13 @@ do
         pkill watchdog
         pkill mux 
         pkill mysqlworker
+        mv std{,1}.log
         ./$d.test -test.v 2>&1 | tee std.log
         egrep -n '^--- (PASS|[^:]*):' std.log
         if ! grep -q '^--- PASS:' std.log
         then
             echo failing $pathD on retry
+            grep ^ *.log
             finalResult=1
         fi
     fi
