@@ -32,7 +32,7 @@ do
     d=`basename $pathD`
     ln $GOPATH/bin/mysqlworker .
 
-    if [ -f ../setup-mysql.sql && ! -f ../setup-mysql.sql.out ]
+    if [ -f ../setup-mysql.sql -a ! -f ../setup-mysql.sql.out ]
     then
         cat ../setup-mysql.sql | mysql -uroot -p1-testDb heratestdb | tee ../setup-mysql.sql.out
     fi
