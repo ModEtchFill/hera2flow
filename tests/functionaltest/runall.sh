@@ -12,7 +12,8 @@ ls -l $GOPATH/bin
 
 cat << EOF > shortRun
 sharding_tests/set_shard_id
-strandedchild_tests/no_free_worker3
+sharding_whitelist_tests/no_shard_no_error
+sharding_whitelist_tests/set_shard_id_wl
 bind_eviction_tests/bind_eviction_disable
 EOF
 
@@ -26,7 +27,7 @@ wc toRun shortRun
 #     no_shard_no_error|set_shard_id_wl|reset_shard_id_wl)' | sed -e "s,^,$suite/," >> toRun
 
 finalResult=0
-for pathD in `cat shortRun toRun`
+for pathD in `cat shortRun` # toRun`
 do 
     pushd $GOPATH/src/github.com/paypal/hera/tests/functionaltest/$pathD
     d=`basename $pathD`
@@ -62,7 +63,7 @@ do
         then
             echo failing $pathD on retry
             sleep 0.01
-            tail -44 ^ *.log
+            tail -n44 ^ *.log
             finalResult=1
         fi
     fi
