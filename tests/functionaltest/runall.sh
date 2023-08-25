@@ -61,9 +61,9 @@ do
         egrep -n '^--- (PASS|[^:]*):' std.log
         if ! grep -q '^--- PASS:' std.log
         then
-            echo failing $pathD on retry
             sleep 0.01
-            tail -n44 *.log
+            tail -n111 *.log
+            echo failing $pathD on retry
             finalResult=1
         fi
     fi
