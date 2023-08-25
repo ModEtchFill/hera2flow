@@ -89,6 +89,7 @@ func (crd *Coordinator) getShardRec(key0 interface{}) *ShardMapRecord {
 		}
 	}
 	bucket := key % uint64(GetConfig().MaxScuttleBuckets)
+	logger.GetLogger().Log(logger.Debug, crd.id, "Sharding map lookup: hash =", key, ", bucket =", bucket, ", 0825kkang =", len(GetShardingCfg().records))
 	shardRec := GetShardingCfg().records[bucket]
 	if logger.GetLogger().V(logger.Debug) {
 		logger.GetLogger().Log(logger.Debug, crd.id, "Sharding map lookup: hash =", key, ", bucket =", bucket, ", shardID =", shardRec.logical)
