@@ -35,8 +35,11 @@ do
     if [ -f ../setup-mysql.sql -a ! -f ../setup-mysql.sql.out ]
     then
         cat ../setup-mysql.sql | mysql -h127.0.0.1 -uroot -p1-testDb heratestdb | tee ../setup-mysql.sql.out
-    else
+    elif [ -f ../setup-mysql.sql.out ]
+    then 
         ls -l ../setup-mysql.sql.out
+    else
+        echo no common setup-mysql.sql $pathD
     fi
     if [ -f setup-mysql.sql ]
     then
