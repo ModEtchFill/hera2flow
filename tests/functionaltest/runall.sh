@@ -47,10 +47,14 @@ do
     if ! grep -q '^--- PASS:' std.log
     then
         echo failing $pathD will retry
+        pkill watchdog
+        pkill mux 
+        pkill mysqlworker
         ./$d.test -test.v 2>&1 | tee std.log
+        egrep -n '^--- (PASS|[^:]*):' std.log
         if ! grep -q '^--- PASS:' std.log
         then
-            echo failing $pathD
+            echo failing $pathD on retry
             finalResult=1
         fi
     fi

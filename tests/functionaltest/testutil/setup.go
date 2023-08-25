@@ -240,23 +240,6 @@ func MakeDB(dockerName string, dbName string, dbType DBType) (ip string) {
 			os.Setenv("username", "appuser")
 		}
 
-			logger.GetLogger().Log(logger.Warning, "20230817kkang pre drop sh map")
-        DBDirect("DROP TABLE IF EXISTS hera_shard_map","127.0.0.1", dbName, MySQL)
-			logger.GetLogger().Log(logger.Warning, "20230817kkang pre create table sh map")
-        DBDirect("CREATE TABLE hera_shard_map (SCUTTLE_ID INT, SHARD_ID INT, STATUS CHAR(1), READ_STATUS CHAR(1), WRITE_STATUS CHAR(1), REMARKS VARCHAR(500))","127.0.0.1", dbName, MySQL);
-        max_scuttle := 128;
-        //err1  := testutil.PopulateShardMap(max_scuttle);
-        for x := 0; x < max_scuttle; x++ {
-			//logger.GetLogger().Log(logger.Warning, "20230817kkang pre sh map",x)
-            dml := fmt.Sprint ("INSERT INTO hera_shard_map VALUES (", x, ", ",  x % 5, ",'Y','Y','Y','Initial')")
-            DBDirect(dml, "127.0.0.1", dbName, MySQL)
-        }
-			logger.GetLogger().Log(logger.Warning, "20230817kkang end sh map")
-
-        	DBDirect("drop table if exists test_simple_table_1", "127.0.0.1", dbName, MySQL)
-	
-		DBDirect("CREATE TABLE test_simple_table_1 (ID INT PRIMARY KEY, NAME VARCHAR(128), STATUS INT, PYPL_TIME_TOUCHED INT)","127.0.0.1", dbName, MySQL)
-
 		return ipBuf.String()
 	} else if dbType == PostgreSQL {
 		cmd := exec.Command("docker", "run", "--name", dockerName, "-e", "POSTGRES_PASSWORD=1-testDb", "-e", "POSTGRES_DB="+dbName, "-d", "postgres:12")
