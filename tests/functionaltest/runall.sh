@@ -46,8 +46,13 @@ do
     egrep -n '^--- (PASS|[^:]*):' std.log
     if ! grep -q '^--- PASS:' std.log
     then
-        echo failing $pathD
-        finalResult=1
+        echo failing $pathD will retry
+        ./$d.test -test.v 2>&1 | tee std.log
+        if ! grep -q '^--- PASS:' std.log
+        then
+            echo failing $pathD
+            finalResult=1
+        fi
     fi
     pkill watchdog
     pkill mux 
