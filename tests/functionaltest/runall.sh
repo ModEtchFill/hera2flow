@@ -61,7 +61,8 @@ do
         if ! grep -q '^--- PASS:' std.log
         then
             echo failing $pathD on retry
-            grep ^ *.log
+            sleep 0.01
+            tail -44 ^ *.log
             finalResult=1
         fi
     fi
