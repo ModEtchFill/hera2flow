@@ -56,17 +56,7 @@ func populate_cam_shard_map() (string,error) {
 
 
 func setupDb() error {
-	testutil.RunDML("DROP TABLE IF EXISTS test_simple_table_2")
-	testutil.RunDML("CREATE TABLE test_simple_table_2 (accountID VARCHAR(64) PRIMARY KEY, NAME VARCHAR(64), STATUS VARCHAR(64), CONDN VARCHAR(64))")
-	testutil.RunDML("DROP TABLE IF EXISTS hera_shard_map")
-	if os.Getenv("WORKER") == "postgres" {
-        	testutil.RunDML("CREATE TABLE hera_shard_map (SCUTTLE_ID BIGINT, SHARD_ID BIGINT, STATUS CHAR(1), READ_STATUS CHAR(1), WRITE_STATUS CHAR(1), REMARKS VARCHAR(500))");
-	} else { 
-        testutil.RunDML("CREATE TABLE hera_shard_map (SCUTTLE_ID INT, SHARD_ID INT, STATUS CHAR(1), READ_STATUS CHAR(1), WRITE_STATUS CHAR(1), REMARKS VARCHAR(500))");
-	}
-	max_scuttle := 128;
-        err  := testutil.PopulateShardMap(max_scuttle);
-        return err
+        return nil
 }
 
 
